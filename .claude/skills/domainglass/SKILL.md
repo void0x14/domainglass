@@ -21,7 +21,7 @@ domainglass sema      # rapor JSON şeması
 
 ```bash
 domainglass -json -sessiz <hedef>          # tam rapor (JSON)
-domainglass -subs <hedef>                  # yalnızca alt alan adları
+domainglass -subs <hedef>                  # hedefin verisinden çıkan alt alan adları
 domainglass -ips <hedef>                   # yalnızca IP adresleri
 domainglass -related <hedef>               # yalnızca ilişkili alan adları
 domainglass ip <adres> -json               # IP: BGP/ASN, konum, ters DNS

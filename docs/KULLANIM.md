@@ -130,7 +130,7 @@ domain.glass servis erişimini sınar. Başarılıysa kod 0, değilse hata kodu 
 | `-ndjson` | Tek satır JSON |
 | `-girintisiz` | JSON girintisiz |
 | `-alan <liste>` | JSON alan seçimi (virgülle) |
-| `-subs` | Alt alan adları, satır satır |
+| `-subs` | Hedefin verisinden çıkan alt alan adları, satır satır |
 | `-ips` | IP adresleri, satır satır |
 | `-related` | İlişkili alan adları, satır satır |
 | `-emails` | E-postalar, satır satır |
@@ -176,7 +176,10 @@ cat hedefler.txt | domainglass toplu -ndjson | jq -c .target
 
 ### Satır çıktısı
 
-Boru hattı araçlarına beslemek için ham liste:
+Boru hattı araçlarına beslemek için ham liste. Bu liste pasif keşif sonucudur:
+hedefin DNS kayıtları, sertifika SAN'ları, sayfası ve arama sonuçlarından çıkan
+adlar. Aktif alt alan adı numaralandırması yapmaz; geniş kapsam için `subfinder`
+gibi bir araçla birlikte kullan.
 
 ```bash
 domainglass -subs example.com | httpx -silent

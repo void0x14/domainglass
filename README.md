@@ -118,7 +118,7 @@ domainglass akis top-gainers
 # Tam JSON raporu
 domainglass -json example.com > rapor.json
 
-# Yalnızca alt alan adları (boru hattı)
+# Hedefin kendi verisinden çıkan alt alan adları (boru hattı)
 domainglass -subs tesla.com | httpx -silent
 
 # Toplu tarama
@@ -239,7 +239,7 @@ domainglass akis newly-ranked-tranco # Tranco yeni girenler
 ## Örnek boru hatları
 
 ```bash
-# Alt alan adı keşfi ve canlılık kontrolü
+# Hedefin verisinden çıkan alt alan adlarını canlılık kontrolüne ver
 domainglass -subs tesla.com | httpx -silent -status-code
 
 # İlişkili IP'leri topla
@@ -284,6 +284,41 @@ domainglass sema      # rapor JSON şeması (JSON Schema 2020-12)
 | [docs/COMMIT-STANDART.md](docs/COMMIT-STANDART.md) | Commit mesajı standardı |
 
 ---
+
+## Keşif ne yapar, ne yapmaz
+
+`discovery` bölümü ve `-subs`/`-ips`/`-related` bayrakları, **hedefin kendi API
+yanıtlarından** çıkan varlıkları toplar:
+
+| Kaynak | Ne verir |
+|---|---|
+| DNS kayıtları (CNAME, MX, NS, SOA) | Kayıtlarda geçen ad sunucuları ve hedefler |
+| RDAP ad sunucuları | Kayıt defteri ad sunucuları |
+| TLS sertifikası SAN listesi | Sertifikada listelenen tüm adlar |
+| Ana sayfa HTML ve yönlendirmeleri | Sayfada geçen bağlantılar |
+| Web arama sonuçları | Hedefe işaret eden sonuçların host adları |
+| Ters DNS (IP hedeflerinde) | PTR adları |
+
+Bu **pasif keşiftir**; aktif alt alan adı numaralandırması değildir. Wordlist
+denemez, DNS zone transfer yapmaz, sertifika şeffaflık günlüklerini taramaz.
+
+Beklenti ölçümü (gerçek çıktılar):
+
+| Hedef | Bulunan alt alan adı |
+|---|---|
+| `example.com` | 0 |
+| `tesla.com` | 2 |
+| `github.com` | 1 |
+| `cloudflare.com` | 10 |
+| `microsoft.com` | 131 |
+
+Sayı hedefin sertifikasında ve sayfasında kaç ad geçtiğine bağlıdır. Geniş
+numaralandırma için `subfinder`, `amass` gibi araçlarla birlikte kullan:
+
+```bash
+subfinder -d tesla.com -silent | httpx -silent        # aktif numaralandırma
+domainglass -subs tesla.com                            # pasif, hedefin verisi
+```
 
 ## Sınırlar ve dürüst notlar
 
