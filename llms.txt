@@ -1,0 +1,44 @@
+# domainglass
+
+> domain.glass istihbaratını terminale taşıyan Go aracı. Alan adı, IP, ASN, TLD
+> ve popülerlik akışlarını tek komutta toplar; insan ve AI ajanları için
+> tasarlandı. Tek ikili dosya, sıfır üçüncü parti bağımlılık.
+
+## Komutlar
+
+- domain: alan adı istihbaratı (DNS, RDAP, WHOIS, TLS, filtreler, keşif)
+- ip: IP istihbaratı (BGP/ASN, konum, ters DNS, TLS)
+- asn: ASN istihbaratı (sahip, prefix, komşuluk)
+- tld: IANA TLD kaydı
+- akis: popülerlik RSS akışları
+- toplu: stdin üzerinden çoklu hedef
+- saglik, sema, yetenek, surum: bilgi komutları
+
+## Temel çağrılar
+
+- `domainglass yetenek` - makine kataloğu (JSON, çevrimdışı)
+- `domainglass sema` - rapor JSON şeması (çevrimdışı)
+- `domainglass -json <hedef>` - tam rapor
+- `domainglass -subs <hedef>` - yalnızca alt alan adları
+- `domainglass -ips <hedef>` - yalnızca IP adresleri
+- `domainglass -cozumleyici quad9,adguard <hedef>` - bağımsız engelleme kontrolü
+- `cat liste.txt | domainglass toplu -ndjson` - toplu tarama
+
+## Çıkış kodları
+
+0 başarılı, 1 hata, 2 kayıtlı değil, 3 hız sınırı, 4 kullanım hatası.
+Veri stdout'ta, günlükler stderr'dedir.
+
+## Belgeler
+
+- [README](README.md): genel bakış, kurulum, örnekler
+- [AGENTS.md](AGENTS.md): ajan çalıştırma sözleşmesi
+- [docs/AI-AJANLARI.md](docs/AI-AJANLARI.md): ajan kılavuzu ve tarifler
+- [docs/KULLANIM.md](docs/KULLANIM.md): tam kullanım başvurusu
+- [docs/MIMARI.md](docs/MIMARI.md): mimari ve tasarım kararları
+- [docs/API-KAYNAK.md](docs/API-KAYNAK.md): uç noktalar ve başlık sözleşmesi
+
+## Lisans
+
+AGPL-3.0
+

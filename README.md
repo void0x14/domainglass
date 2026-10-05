@@ -1,94 +1,258 @@
 # domainglass
 
-> **domain.glass** servisini en hızlı, tam yetenekli ve efektif şekilde terminale taşıyan, yapay zeka (AI) ajanları ve güvenlik araştırmacıları için optimize edilmiş Go aracı.
+**domain.glass** servisinin tüm istihbaratını terminale taşıyan Go aracı. İnsan
+güvenlik araştırmacıları ve yapay zeka ajanları için tasarlandı.
 
-`domainglass`, web tarayıcısına ihtiyaç duymadan `domain.glass` platformunun sağladığı tüm DNS, RDAP, DNSSEC, Cisco/Tranco popülerlik sıralamaları, tehdit filtreleri (Cloudflare, Quad9, AdGuard vb.), TLS sertifika SAN analizleri, IP/ASN yönlendirme istihbaratı ve pasif altyapı keşiflerini tek bir ikili dosyada (`binary`) sunar.
+Tek ikili dosya, sıfır üçüncü parti bağımlılık. Alan adı, IP, ASN ve TLD
+istihbaratını; DNS/RDAP/WHOIS kayıtlarını, TLS sertifika keşfini, tehdit
+filtrelerini ve pasif altyapı korelasyonunu tek komutta verir.
 
 ---
 
-## Özellikler
+## Neden domainglass
 
-- **DNS & DNSSEC İstihbaratı:** A, AAAA, CNAME, MX, NS, TXT, SOA kayıtları, TTL süreleri ve resolver DNSSEC doğrulama durumu.
-- **RDAP & Kayıt Bilgisi:** Yetkili yazman (Registrar), kayıt / bitiş / değişiklik tarihleri, authoritative NameServer listesi.
-- **Popülerlik Sıralamaları:** Günlük Cisco Umbrella ve Tranco Top 1M derecelendirmesi ve günlük sıra değişimi (`change`).
-- **Güvenlik ve Tehdit Filtreleri:** Cloudflare Malware/Family, Quad9, AdGuard DNS, CleanBrowsing ve Control D güvenlik/oltalama/reklam engelleme kontrolleri.
-- **TLS Sertifika & SAN Keşfi:** Canlı port 443 SNI incelemesi, yayımcı, kalan gün sayısı ve tüm SAN (Subject Alternative Names) alan adları.
-- **Pasif Altyapı Keşfi (`Discovered Hosts`):** DNS yanıtları, TLS SAN kayıtları ve web profili üzerinden hedefe ait alt alan adları, ilişkili alan adları ve IP adreslerinin otomatik korelasyonu.
-- **IP & ASN Yönlendirme:** IP sorgularında BGP anons durumu, prefix, Origin ASN ve organizasyon bilgisi, yaklaşık coğrafi konum ve RIR RDAP tahsisi.
-- **Agentic & Boru Hattı (Pipeline) Desteği:** 
-  - Standart unix filtreleri (`-subs`, `-ips`, `-related`) sayesinde doğrudan `httpx`, `subfinder` veya diğer araçlara beslenebilir.
-  - `--schema` bayrağı ile AI ajanları aracı sıfır sürtünmeyle çağırabilir.
-  - `--json` bayrağı ile tam yapılandırılmış çıktı üretir.
-  - `stdin` üzerinden toplu liste kabul eder.
+- **Tek çağrı, tam rapor:** DNS, RDAP, WHOIS, TLS SAN, popülerlik sıralaması,
+  DNS filtreleri ve web profili paralel toplanır.
+- **Ajan dostu:** Kararlı JSON şeması (`domainglass sema`), makine kataloğu
+  (`domainglass yetenek`), alan seçimi (`-alan`), NDJSON akışı ve anlamlı çıkış
+  kodları.
+- **Boru hattı dostu:** `-subs`, `-ips`, `-related`, `-emails`, `-orgs` bayrakları
+  temiz satır çıktısı verir; `httpx`, `nuclei`, `subfinder` ile doğrudan zincirlenir.
+- **Bağımsız doğrulama:** `-cozumleyici` ile Quad9, AdGuard, CleanBrowsing,
+  Control D ve Cloudflare aile/güvenlik filtrelerine doğrudan DNS sorgusu yapılır.
+- **Hız sınırına saygılı:** İstekler arasında ayarlanabilir asgari aralık ve
+  üstel geri çekilme; domain.glass kapılarına takılmadan toplu tarama.
 
 ---
 
 ## Kurulum
 
-### Kaynak Koddan Derleme
+### Go ile derleme
+
+```bash
+go install github.com/void0x14/domainglass/cmd/domainglass@latest
+```
+
+### Kaynak koddan
+
 ```bash
 git clone https://github.com/void0x14/domainglass.git
 cd domainglass
-go build -o domainglass cmd/domainglass/main.go
-sudo mv domainglass /usr/local/bin/
+go build -o domainglass ./cmd/domainglass
+sudo install -m 0755 domainglass /usr/local/bin/
 ```
+
+Go 1.21 veya üzeri gerekir. Harici Go bağımlılığı yoktur.
 
 ---
 
-## Kullanım
+## Hızlı başlangıç
 
-### 1. Temel Domain İstihbaratı
 ```bash
+# Alan adı: DNS + RDAP + WHOIS + TLS + filtreler + keşif
 domainglass example.com
-```
 
-### 2. IP Adresi ve ASN Analizi
-```bash
-domainglass 1.1.1.1
-```
+# IP adresi: BGP/ASN + konum + ters DNS + TLS
+domainglass ip 1.1.1.1
 
-### 3. Alt Alan Adlarını Satır Satır Çekme (Pipeline)
-```bash
+# ASN: sahip, prefix sayısı, komşuluk
+domainglass asn 13335
+
+# TLD: IANA kaydı
+domainglass tld com
+
+# Popülerlik akışı: en çok yükselenler
+domainglass akis top-gainers
+
+# Tam JSON raporu
+domainglass -json example.com > rapor.json
+
+# Yalnızca alt alan adları (boru hattı)
 domainglass -subs tesla.com | httpx -silent
-```
 
-### 4. İlişkili IP Adreslerini Çekme
-```bash
-domainglass -ips tesla.com
-```
-
-### 5. Yapay Zeka Ajanları ve Otomasyon İçin JSON Çıktısı
-```bash
-domainglass -json tesla.com > tesla_recon.json
-```
-
-### 6. Toplu Alan Adı Tarama (Stdin)
-```bash
-cat domains.txt | domainglass -subs > all_subdomains.txt
-```
-
-### 7. AI Ajanları İçin JSON Şeması
-```bash
-domainglass -schema
+# Toplu tarama
+cat hedefler.txt | domainglass toplu -ndjson > sonuclar.ndjson
 ```
 
 ---
 
-## Seçenekler (CLI Flags)
+## Komutlar
+
+| Komut | Açıklama |
+|---|---|
+| `domain <ad>` | Alan adı istihbaratı (varsayılan; komut yazmadan da çalışır) |
+| `ip <adres>` | IP adresi istihbaratı (varsayılan; komut yazmadan da çalışır) |
+| `asn <numara>` | ASN istihbaratı |
+| `tld <tld>` | IANA TLD kaydı |
+| `akis <ad>` | RSS popülerlik akışı |
+| `toplu` | stdin üzerinden çoklu hedef |
+| `saglik` | Servis erişimini sınar |
+| `sema` | Rapor JSON şeması |
+| `yetenek` | Makine kataloğu (JSON) |
+| `surum` | Sürüm |
+
+Hedef türü otomatik sezilir: `domainglass example.com` ile
+`domainglass domain example.com` aynıdır.
+
+---
+
+## Bayraklar
 
 | Bayrak | Açıklama |
 |---|---|
-| `<hedef>` | İncelenecek alan adı veya IP adresi |
-| `-subs` | Yalnızca keşfedilen alt alan adlarını (subdomains) yazdırır |
-| `-ips` | Yalnızca tespit edilen IP adreslerini yazdırır |
-| `-related` | Yalnızca ilişkili kök alan adlarını yazdırır |
-| `-json` | Tüm istihbarat raporunu saf JSON formatında döndürür |
-| `-schema` | Agentic araç entegrasyonları için JSON şemasını basar |
-| `-timeout` | İstek zaman aşımı süresi saniye cinsinden (varsayılan: 15) |
-| `-version` | domainglass sürümünü gösterir |
+| `-json` | Okunabilir JSON çıktısı |
+| `-ndjson` | Tek satır JSON (akış için) |
+| `-alan <liste>` | JSON çıktısında yalnızca seçilen üst düzey alanlar |
+| `-subs` | Yalnızca alt alan adları (satır satır) |
+| `-ips` | Yalnızca IP adresleri (satır satır) |
+| `-related` | Yalnızca ilişkili alan adları (satır satır) |
+| `-emails` | Yalnızca e-postalar (satır satır) |
+| `-orgs` | Yalnızca kurum adları (satır satır) |
+| `-cozumleyici <idler>` | Bağımsız DNS filtre çözümleyicileri (virgülle ayrılmış) |
+| `-timeout <sn>` | İstek zaman aşımı (varsayılan 20) |
+| `-hiz <ms>` | İstekler arası asgari aralık (varsayılan 1100) |
+| `-renk auto|always|never` | Renk kipi |
+| `-sessiz` | İlerleme günlüklerini bastır |
+| `-girintisiz` | JSON çıktısını girintisiz yaz |
+| `-yardim`, `-surum`, `-sema`, `-yetenek` | Yardım, sürüm, şema, katalog |
+
+---
+
+## Çıkış kodları
+
+| Kod | Ad | Anlam |
+|---|---|---|
+| 0 | `basarili` | Sorgu tamamlandı, veri mevcut |
+| 1 | `hata` | Parametre, ağ veya beklenmeyen hata |
+| 2 | `bulunamadi` | Hedef kayıtlı değil (NXDOMAIN veya RDAP not_found) |
+| 3 | `hiz_siniri` | Hız sınırı; hiçbir kaynak veri döndürmedi |
+| 4 | `kullanim` | Geçersiz komut satırı kullanımı |
+
+Veri **stdout**, günlük ve uyarılar **stderr** üzerindedir. Boru hatlarında
+`2>/dev/null` ile günlükleri ayırabilirsiniz.
+
+---
+
+## Ortam değişkenleri
+
+| Değişken | Etki |
+|---|---|
+| `DOMAINGLASS_API` | API kök adresi (varsayılan `https://domain.glass`) |
+| `DOMAINGLASS_UA` | HTTP User-Agent |
+| `DOMAINGLASS_HIZ` | Varsayılan istek aralığı (ms) |
+| `DOMAINGLASS_TIMEOUT` | Varsayılan zaman aşımı (sn) |
+| `DOMAINGLASS_RENK` | `auto` / `always` / `never` |
+| `DOMAINGLASS_COZUMSYICI` | Varsayılan çözümleyici listesi |
+
+---
+
+## Bağımsız DNS çözümleyicileri
+
+`-cozumleyici` bayrağı, verilen adı sekiz farklı DNS filtresine doğrudan sorar.
+Kendi DNS yapılandırmanız yanlış olsa bile gerçek engelleme durumunu görürsünüz.
+
+| ID | Sağlayıcı | Filtre rolü |
+|---|---|---|
+| `cloudflare` | Cloudflare 1.1.1.1 | — |
+| `cloudflare-guvenlik` | Cloudflare for Families (Güvenlik) | malware |
+| `cloudflare-aile` | Cloudflare for Families (Aile) | adult |
+| `google` | Google Public DNS | — |
+| `quad9` | Quad9 | malware |
+| `adguard` | AdGuard DNS | advertising |
+| `cleanbrowsing` | CleanBrowsing Güvenlik | adult |
+| `controld` | Control D (Free) | advertising |
+
+```bash
+domainglass -cozumleyici quad9,adguard,cleanbrowsing example.com
+domainglass -cozumleyici cloudflare-guvenlik supheli-alan.com -ips
+```
+
+Filtreler engellenen adları `0.0.0.0` veya `::` adresine yönlendirir; araç bunu
+`ENGELLİ` olarak işaretler.
+
+---
+
+## Popülerlik akışları
+
+```bash
+domainglass akis trending            # Cisco Umbrella trend
+domainglass akis top-gainers         # Cisco Umbrella en çok yükselenler
+domainglass akis newly-ranked        # Cisco Umbrella yeni girenler
+domainglass akis trending-tranco     # Tranco trend
+domainglass akis top-gainers-tranco  # Tranco en çok yükselenler
+domainglass akis newly-ranked-tranco # Tranco yeni girenler
+```
+
+---
+
+## Örnek boru hatları
+
+```bash
+# Alt alan adı keşfi ve canlılık kontrolü
+domainglass -subs tesla.com | httpx -silent -status-code
+
+# İlişkili IP'leri topla
+domainglass -ips tesla.com | sort -u > ips.txt
+
+# Toplu tarama, yalnızca kayıtlı alanları süz
+cat hedefler.txt | domainglass toplu -ndjson 2>/dev/null | jq -c 'select(.summary.registered==true) | .target'
+
+# Yalnızca güvenlik bayraklı alanları süz
+cat hedefler.txt | domainglass toplu -ndjson 2>/dev/null | jq -c 'select(.safety.flagged==true) | .target'
+
+# IP -> ASN -> komşuluk zinciri
+domainglass ip 1.1.1.1 -json | jq -r '.ip.asns[0].number' | xargs -I{} domainglass asn {} -json
+```
+
+---
+
+## Yapay zeka ajanları için
+
+Ajanlar tahmin etmek zorunda değil; aracın kendi kataloğunu okur:
+
+```bash
+domainglass yetenek   # komutlar, bayraklar, çıkış kodları, çözümleyiciler (JSON)
+domainglass sema      # rapor JSON şeması (JSON Schema 2020-12)
+```
+
+- Ayrıntılı ajan sözleşmesi: [AGENTS.md](AGENTS.md)
+- Ajan kullanım kılavuzu: [docs/AI-AJANLARI.md](docs/AI-AJANLARI.md)
+- Claude Code skill: [.claude/skills/domainglass/SKILL.md](.claude/skills/domainglass/SKILL.md)
+
+---
+
+## Dokümantasyon
+
+| Belge | İçerik |
+|---|---|
+| [docs/KULLANIM.md](docs/KULLANIM.md) | Ayrıntılı kullanım, tüm bayraklar, tarifler |
+| [docs/AI-AJANLARI.md](docs/AI-AJANLARI.md) | Ajan entegrasyonu, JSON şeması, tarifler |
+| [docs/MIMARI.md](docs/MIMARI.md) | Paket yapısı, veri akışı, tasarım kararları |
+| [docs/API-KAYNAK.md](docs/API-KAYNAK.md) | domain.glass uç noktaları ve başlık sözleşmesi |
+| [docs/GELISTIRME.md](docs/GELISTIRME.md) | Geliştirme, test, katkı |
+
+---
+
+## Sınırlar ve dürüst notlar
+
+- domain.glass resmî bir API yayınlamaz; araç sitenin kendi uç noktalarını
+  kullanır. Site sözleşmesi değişirse kaynaklar tek tek düşer ve rapor bunu
+  `sources` bölümünde `error`/`throttled` olarak bildirir; sessizce yanlış veri
+  üretmez.
+- Bazı uç noktalar (TLS, web profili, WHOIS, sınıflandırma, güvenlik) site
+  tarafında "eşleşen sayfadan gel" kapısıyla korunur. Araç, isteği site
+  sözleşmesine uygun başlıklarla (Referer, Origin, X-Domain-Glass-Action) yapar;
+  yine de hız sınırına takılırsa üstel geri çekilmeyle yeniden dener ve sonuçta
+  ilgili kaynağı rapor içinde işaretler.
+- IP konumu kaba tahmindir (BGP anons verisine dayanır), adres düzeyinde kesin
+  konum değildir.
+- TLS SAN listeleri ortak sertifikalarda ilgisiz adlar içerebilir; bu ortak
+  sahiplik kanıtı değildir.
 
 ---
 
 ## Lisans
 
-Bu proje **GNU Affero General Public License v3.0 (AGPL-3.0)** altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakabilirsiniz.
+**GNU Affero General Public License v3.0 (AGPL-3.0)**. Ayrıntılar için
+[LICENSE](LICENSE) dosyasına bakın.
+

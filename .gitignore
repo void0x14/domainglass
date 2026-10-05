@@ -1,4 +1,9 @@
-domainglass
+# Derleme çıktıları
+/domainglass
+/domainglass.exe
 *.test
 *.out
+
+# Geçici dosyalar
 .DS_Store
+

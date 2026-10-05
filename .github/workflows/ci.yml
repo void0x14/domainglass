@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+      - name: Biçim denetimi
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "gofmt gerekli: $unformatted"
+            exit 1
+          fi
+      - name: Vet
+        run: go vet ./...
+      - name: Test
+        run: go test ./...
+      - name: Derleme
+        run: go build -o domainglass ./cmd/domainglass
+      - name: Sema geçerliliği
+        run: ./domainglass sema | python3 -m json.tool > /dev/null
+      - name: Katalog geçerliliği
+        run: ./domainglass yetenek | python3 -m json.tool > /dev/null
+
