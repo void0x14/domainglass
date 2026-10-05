@@ -1,0 +1,4 @@
+domainglass
+*.test
+*.out
+.DS_Store
