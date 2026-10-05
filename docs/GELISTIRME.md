@@ -96,8 +96,8 @@ olmadığı.
 
 ```bash
 domainglass kimlik
-# örnek: 3dbbad9 · git · go1.21 · linux/amd64
-# kirli ağaç: 3dbbad9+ · git · go1.21 · linux/amd64
+# örnek: 1a2b3c4 · git · go1.21 · linux/amd64
+# kirli ağaç: 1a2b3c4+ · git · go1.21 · linux/amd64
 ```
 
 Kimlik iki kaynaktan çıkarılır (internal/build paketi):
@@ -115,7 +115,7 @@ Kimlik hem insan başlığında, hem JSON raporundaki `tool` bölümünde, hem d
 ```json
 "tool": {
   "name": "domainglass",
-  "commit": "3dbbad9",
+  "commit": "1a2b3c4",
   "dirty": false,
   "go": "go1.21",
   "platform": "linux/amd64"

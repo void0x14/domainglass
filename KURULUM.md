@@ -83,12 +83,9 @@ go version
 
 **DİKKAT:** bu depo tag yayınlamaz, sürüm numarası taşımaz. Bu yüzden `@latest`
 güvenilir değildir: modül proxy'si `@latest` isteğini önbellekten eski bir commit
-ile yanıtlar. Ölçülen örnek:
-
-```text
-proxy @latest        -> 307946d  (eski)
-github main          -> 244ff26  (güncel)
-```
+ile yanıtlar. Ölçülen davranış: `@latest` proxy önbelleğindeki eski bir commit'i döndürürken
+`refs/heads/main` daha ilerideydi. Yani proxy ile GitHub aynı commit'i
+göstermiyordu.
 
 İki çözüm var. **Birincisi kesin sonuç verir, onu kullan.**
 
@@ -135,18 +132,25 @@ go install "github.com/void0x14/domainglass/cmd/domainglass@<commit>"
 domainglass kimlik    # kurduğun commit ile eşleşmeli
 ```
 
-Doğrulanmış örnekler:
+Her commit'in ne içerdiğini ve çekilip çekilemeyeceğini mesajın kendisi söyler:
 
-| Commit | Ne içerir | Kurulabilir mi |
-|---|---|---|
-| `c94e95a` | ilk sürüm denemesi | **Hayır** — `cmd/` dizini o commit'te yok |
-| `307946d` | çalışan ilk araç | Evet — `domainglass surum` → `1.0.0` |
-| `3dbbad9` | KURULUM.md eklendi | Evet — `domainglass surum` → `1.0.0` |
-| `8b75be7` | sürüm kaldırıldı, kimlik geldi | Evet — `domainglass kimlik` |
-| `244ff26` | go install düzeltmesi | Evet — güncel |
+```bash
+git log --format='%h %s' | cat          # özet liste
+git log -1 --format=%B <commit>         # tam mesaj (Neden/Ne/Kanıt/Çekilebilir)
+```
 
-Not: `8b75be7` öncesi commit'lerde `kimlik` komutu yoktur, `surum` vardır.
-`8b75be7` sonrasında tersi geçerlidir.
+Mesajlardaki `Çekilebilir:` etiketi "bu commit tek başına çekilip kullanılabilir mi"
+sorusunu yanıtlar. `hayır` yazan bir commit başka bir commit'e bağımlıdır;
+bağımlılık aynı mesajın `Ne` bölümünde yazılıdır.
+
+Kurulumdan önce hangi commit'i çektiğini denetle:
+
+```bash
+git log -1 --format=%B "$(git ls-remote https://github.com/void0x14/domainglass refs/heads/main | cut -f1)"
+```
+
+Not: depo ilk kurulum sırasında tek bir kök commit'e indirildi; öncesine ait
+commit'ler geçmişte yoktur.
 
 Kurulum dizinini PATH'e ekle (yalnızca eksikse):
 
@@ -200,7 +204,7 @@ Her komutu çalıştır ve beklenen sonucu gör.
 domainglass kimlik
 ```
 Beklenen: `<commit> · <kaynak> · <go sürümü> · <platform>` biçiminde tek satır.
-Örnek: `3dbbad9 · git · go1.21 · linux/amd64`. Çıkış kodu 0.
+Örnek: `1a2b3c4 · git · go1.21 · linux/amd64`. Çıkış kodu 0.
 
 ### 4.2 Sözleşme okunabilir mi (çevrimdışı)
 
