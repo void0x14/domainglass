@@ -57,9 +57,17 @@ kalıplarını, kısıtları ve sorun giderme adımlarını içerir.
 
 #### Go ile derleme
 
+Bu depo tag yayınlamaz ve sürüm numarası taşımaz; bu yüzden `@latest` yerine
+commit hash'i ile sabitle:
+
 ```bash
-go install github.com/void0x14/domainglass/cmd/domainglass@latest
+COMMIT=$(git ls-remote https://github.com/void0x14/domainglass refs/heads/main | cut -f1)
+go install "github.com/void0x14/domainglass/cmd/domainglass@${COMMIT}"
 ```
+
+Modül proxy `@latest` için eski bir commit'i önbellekten döndürebilir; commit ile
+sabitlemek kesin sonuç verir. Kurulumdan sonra `domainglass kimlik` çıktısındaki
+commit'i 1. adımda aldığın değerle karşılaştır.
 
 #### Kaynak koddan
 

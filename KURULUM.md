@@ -81,21 +81,28 @@ go version
 
 ### Yol A — go install (tercih edilen)
 
+**DİKKAT:** bu depo tag yayınlamaz, sürüm numarası taşımaz. Bu yüzden `@latest`
+kullanma. Modül proxy `@latest` için önbelleğe aldığı eski bir commit'i döndürür
+ve kurduğun ikili güncel koddan gelmez.
+
+Onun yerine her zaman **commit hash'i ile sabitle**:
+
 ```bash
-go install github.com/void0x14/domainglass/cmd/domainglass@latest
+# 1. Güncel commit'i öğren
+COMMIT=$(git ls-remote https://github.com/void0x14/domainglass refs/heads/main | cut -f1)
+echo "$COMMIT"
+
+# 2. O commit'i kur
+go install "github.com/void0x14/domainglass/cmd/domainglass@${COMMIT}"
 ```
 
 Bu komut ikiliyi $(go env GOPATH)/bin/domainglass yoluna koyar.
 
-Üretimde sonucu sabitlemek istersen @latest yerine commit hash'i kullan. Bu araç
-sürüm numarası taşımaz; ayırt edici değer commit'tir:
+Alternatif olarak `@main` de kullanılabilir, ancak proxy onu da geciktirebilir;
+commit hash'i kesin sonuç verir. Kurulumdan sonra doğrula:
 
 ```bash
-# Önce mevcut commit'i öğren
-git ls-remote https://github.com/void0x14/domainglass refs/heads/main
-
-# Sonra o commit'e sabitle
-go install github.com/void0x14/domainglass/cmd/domainglass@<40-haneli-commit>
+domainglass kimlik    # çıktıdaki commit, 1. adımda aldığın commit ile aynı olmalı
 ```
 
 Kurulum dizinini PATH'e ekle (yalnızca eksikse):
@@ -279,6 +286,18 @@ domainglass -json -sessiz -hiz 2500 <hedef>
 
 Bu beklenen bir durumdur. Rapor sources dizisinde her kaynağın durumunu bildirir ve
 kalan veriyi yine üretir. Eksik alanı temiz sayma.
+
+### Kurulan ikili güncel değil
+
+Modül proxy `@latest` isteğini önbellekten eski bir commit ile yanıtlar. Bu depo
+tag yayınlamadığı için proxy'nin güncellenmesini beklemek yerine commit ile
+sabitle:
+
+```bash
+COMMIT=$(git ls-remote https://github.com/void0x14/domainglass refs/heads/main | cut -f1)
+go install "github.com/void0x14/domainglass/cmd/domainglass@${COMMIT}"
+domainglass kimlik    # commit eşleşmeli
+```
 
 ### go install modül indiremiyor
 
