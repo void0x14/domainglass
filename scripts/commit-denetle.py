@@ -73,17 +73,31 @@ def baslik_denetle(satir, hatalar):
         hatalar.append("özet boş olamaz")
     if ozet.endswith("."):
         hatalar.append("özet nokta ile bitmemeli")
-    if ozet[0:1].isupper() and tip != "revert":
-        hatalar.append("özet küçük harfle başlamalı (başlık stili)")
+    # Kısaltmalar (IP, DNS, TLS, ASN, RDMA...) büyük harfle başlayabilir;
+    # bu başlık stili ihlali değildir. İlk sözcük tümü büyükse kabul et.
+    ilk_sozcuk = ozet.split()[0] if ozet.split() else ""
+    kisaltma = ilk_sozcuk.isupper() and 2 <= len(ilk_sozcuk) <= 6
+    if ozet[0:1].isupper() and tip != "revert" and not kisaltma:
+        hatalar.append("özet küçük harfle başlamalı (başlık stili); kısaltmalar hariç")
+
+
+# Tanınan bölüm adları. Yeni bir bölüm eklemek sözleşme değişikliğidir;
+# bu kümeyi ve docs/COMMIT-STANDART.md dosyasını birlikte güncelle.
+BOLUM_ADLARI = {"Neden", "Ne", "Kanıt", "Çekilebilir", "Kırıcı"}
 
 
 def bolumleri_ayikla(govde):
-    """Gövdeyi \"Ad: içerik\" bölümlerine ayırır."""
+    """Gövdeyi "Ad: içerik" bölümlerine ayırır.
+
+    Yalnızca BOLUM_ADLARI içindeki adlar başlık sayılır. Serbest metinde geçen
+    "Temiz klon: ..." gibi satırlar başlık sanılmamalıdır; aksi hâlde Kanıt
+    bölümü erken kesilir ve içerik kaybolur.
+    """
     bolumler = {}
     aktif = None
     for satir in govde.splitlines():
-        eslesme = re.match(r"^([A-ZÇĞİÖŞÜ][A-Za-zÇĞİÖŞÜçğıöşü ]{1,15}):\s*(.*)$", satir)
-        if eslesme and not satir.startswith("-"):
+        eslesme = re.match(r"^([^:]{1,20}):\s*(.*)$", satir)
+        if eslesme and eslesme.group(1).strip() in BOLUM_ADLARI and not satir.startswith("-"):
             aktif = eslesme.group(1).strip()
             bolumler[aktif] = eslesme.group(2)
         elif aktif is not None:
