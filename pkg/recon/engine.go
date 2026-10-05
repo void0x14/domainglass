@@ -141,6 +141,18 @@ func RunRecon(ctx context.Context, c *client.DomainGlassClient, target string) (
 			dirTLS, _ := client.ProbeDirectTLS(target, 5*time.Second)
 			report.DirectTLS = dirTLS
 		}
+		report.DiscoveredHosts = ExtractDiscoveredHosts(target, report.Domain, report.TLS, report.WebProfile)
+		foundTarget := false
+		for _, ip := range report.DiscoveredHosts.IPs {
+			if ip == target {
+				foundTarget = true
+				break
+			}
+		}
+		if !foundTarget {
+			report.DiscoveredHosts.IPs = append(report.DiscoveredHosts.IPs, target)
+			sort.Strings(report.DiscoveredHosts.IPs)
+		}
 		return report, nil
 	}
 
