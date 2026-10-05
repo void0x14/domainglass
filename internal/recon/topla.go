@@ -7,13 +7,11 @@ import (
 	"sync"
 	"time"
 
+	"github.com/void0x14/domainglass/internal/build"
 	"github.com/void0x14/domainglass/internal/dg"
 	"github.com/void0x14/domainglass/internal/dns"
 	"github.com/void0x14/domainglass/internal/model"
 )
-
-// SurumBilgisi, rapora yazılan araç kimliğidir.
-var SurumBilgisi = "0.0.0-dev"
 
 // Secenekler, toplama davranışını belirler.
 type Secenekler struct {
@@ -31,7 +29,7 @@ type Secenekler struct {
 func Topla(ctx context.Context, c *dg.Client, hedef string, s Secenekler) *model.Rapor {
 	rapor := &model.Rapor{
 		Hedef:     hedef,
-		Arac:      model.AracBilgisi{Ad: "domainglass", Surum: SurumBilgisi},
+		Arac:      build.AracBilgisi("domainglass"),
 		Olusturma: time.Now().UTC().Format(time.RFC3339),
 		Uyarilar:  []string{},
 		Kaynaklar: []model.KaynakDurumu{},

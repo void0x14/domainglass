@@ -56,7 +56,7 @@ internal/out/               -> human / json / ndjson / alan seçimi yazıcılar�
    subdomain, ilişkili alan adı, IP ayıklama; kaynak etiketli çıktı.
 4. **T4 — CLI sözleşmesi:** komutlar (`domain`, `ip`, `asn`, `tld`, `akış`, `toplu`),
    çıkış kodları (`0/1/2/3/4`), `-json`, `-ndjson`, `-alan`, `-subs/-ips/-related`,
-   `-paralel`, `-timeout`, `-sürüm`, `-şema`.
+   `-paralel`, `-timeout`, `-kimlik`, `-şema`.
 5. **T5 — Çıktı katmanı:** Türkçe insan çıktısı (renkli, TTY algılamalı), deterministik JSON,
    alan seçimi doğrulaması.
 6. **T6 — Dokümantasyon:** `README.md`, `AGENTS.md`, `docs/KULLANIM.md`,

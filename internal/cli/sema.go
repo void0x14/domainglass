@@ -18,10 +18,13 @@ var Sema = `{
     "kind": { "type": "string", "enum": ["domain", "ip", "asn", "tld", "feed"] },
     "tool": {
       "type": "object",
-      "required": ["name", "version"],
+      "required": ["name"],
       "properties": {
         "name": { "const": "domainglass" },
-        "version": { "type": "string" }
+        "commit": { "type": "string", "description": "İkiliyi üreten commit hash'i (7 hane)." },
+        "dirty": { "type": "boolean", "description": "Derleme sırasında çalışma ağacı kirli miydi." },
+        "go": { "type": "string" },
+        "platform": { "type": "string" }
       }
     },
     "generatedAt": { "type": "string", "description": "RFC3339 UTC üretim zamanı." },

@@ -14,7 +14,7 @@ domainglass yetenek   # komutlar, bayraklar, çıkış kodları, çözümleyici 
 domainglass sema      # rapor JSON şeması (JSON Schema 2020-12)
 ```
 
-Bu iki komut her zaman çevrimdışı çalışır (ağ erişimi gerekmez) ve sürümle
+Bu iki komut her zaman çevrimdışı çalışır (ağ erişimi gerekmez) ve ikiliyle
 birlikte sabittir.
 
 ## Çıktı kanalları
@@ -59,7 +59,7 @@ Her JSON raporu şu üst düzey alanları taşır:
 {
   "target": "example.com",
   "kind": "domain",
-  "tool": { "name": "domainglass", "version": "1.0.0" },
+  "tool": { "name": "domainglass", "commit": "3dbbad9", "dirty": false },
   "generatedAt": "2026-10-05T00:00:00Z",
   "summary": { "registered": true, "ciscoRank": 5098 },
   "discovery": { "subdomains": [], "related": [], "ips": [] },

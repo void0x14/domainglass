@@ -169,7 +169,7 @@ func baslik(w io.Writer, rapor *model.Rapor, renk Renk) {
 	case "feed":
 		tur = "Akış"
 	}
-	fmt.Fprintf(w, " %s  %s\n", renk.Baslik("DOMAINGLASS"), renk.Solgun("v"+rapor.Arac.Surum))
+	fmt.Fprintf(w, " %s  %s\n", renk.Baslik("DOMAINGLASS"), renk.Solgun(aracKimligi(rapor.Arac)))
 	fmt.Fprintf(w, " %s: %s  (%s)\n", renk.Etiket("Hedef"), rapor.Hedef, tur)
 	if rapor.Olusturma != "" {
 		fmt.Fprintf(w, " %s: %s\n", renk.Etiket("Oluşturma"), rapor.Olusturma)
@@ -588,4 +588,17 @@ func OzetSatirlari(rapor *model.Rapor) []string {
 		out = append(out, "güvenlik bayrağı: "+strings.Join(rapor.Ozet.GuvenlikBayrak, ", "))
 	}
 	return out
+}
+
+// aracKimligi, rapor başlığında gösterilecek araç kimliğini üretir.
+// Sürüm numarası yoktur; ikiliyi ayırt eden şey commit hash'idir.
+func aracKimligi(a model.AracBilgisi) string {
+	if a.Commit == "" {
+		return "bilinmeyen derleme"
+	}
+	kimlik := a.Commit
+	if a.Degisti {
+		kimlik += "+ (yerel değişikliklerle)"
+	}
+	return kimlik
 }

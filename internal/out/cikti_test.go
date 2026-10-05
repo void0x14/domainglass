@@ -18,7 +18,7 @@ func ornekRapor() *model.Rapor {
 	return &model.Rapor{
 		Hedef:     "example.com",
 		Tur:       "domain",
-		Arac:      model.AracBilgisi{Ad: "domainglass", Surum: "1.0.0"},
+		Arac:      model.AracBilgisi{Ad: "domainglass", Commit: "3dbbad9", Go: "go1.21", Platform: "linux/amd64"},
 		Olusturma: "2026-10-05T00:00:00Z",
 		Ozet: model.Ozet{
 			Kayitli:      &kayitli,

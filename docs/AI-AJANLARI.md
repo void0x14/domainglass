@@ -24,7 +24,7 @@ domainglass sema
 ```json
 {
   "tool": "domainglass",
-  "version": "1.0.0",
+  "build": { "commit": "3dbbad9", "dirty": false, "go": "go1.21", "platform": "linux/amd64" },
   "commands": [ { "name": "domain", "summary": "...", "example": "..." } ],
   "flags":    [ { "names": ["json"], "takesValue": false, "description": "..." } ],
   "exitCodes":[ { "code": 0, "name": "basarili", "description": "..." } ],

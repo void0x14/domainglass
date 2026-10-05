@@ -29,6 +29,8 @@ Harici Go bağımlılığı yoktur. Depo: `https://github.com/void0x14/domaingla
    Kimlik bilgisi soran bir adım yoktur.
 7. **Tahmin etme.** Bayrak ve komutları bu dosyadan veya `domainglass yetenek`
    çıktısından al. README'nin insan bölümlerini okumak zorunda değilsin.
+8. **Sürüm arama.** Bu araçta sürüm numarası yoktur. Bir derlemeyi ayırt etmek
+   için `domainglass kimlik` çıktısındaki commit hash'ini kullan.
 
 ---
 
@@ -85,6 +87,17 @@ go install github.com/void0x14/domainglass/cmd/domainglass@latest
 
 Bu komut ikiliyi $(go env GOPATH)/bin/domainglass yoluna koyar.
 
+Üretimde sonucu sabitlemek istersen @latest yerine commit hash'i kullan. Bu araç
+sürüm numarası taşımaz; ayırt edici değer commit'tir:
+
+```bash
+# Önce mevcut commit'i öğren
+git ls-remote https://github.com/void0x14/domainglass refs/heads/main
+
+# Sonra o commit'e sabitle
+go install github.com/void0x14/domainglass/cmd/domainglass@<40-haneli-commit>
+```
+
 Kurulum dizinini PATH'e ekle (yalnızca eksikse):
 
 ```bash
@@ -134,9 +147,10 @@ Her komutu çalıştır ve beklenen sonucu gör.
 ### 4.1 İkili çalışıyor mu
 
 ```bash
-domainglass surum
+domainglass kimlik
 ```
-Beklenen: `domainglass 1.0.0` (veya daha yeni). Çıkış kodu 0.
+Beklenen: `<commit> · <kaynak> · <go sürümü> · <platform>` biçiminde tek satır.
+Örnek: `3dbbad9 · git · go1.21 · linux/amd64`. Çıkış kodu 0.
 
 ### 4.2 Sözleşme okunabilir mi (çevrimdışı)
 
@@ -232,7 +246,7 @@ Bitirmeden önce hepsini işaretle. İşaretleyemediğin madde varsa kurulum tam
 
 - [ ] go version ≥ 1.21
 - [ ] command -v domainglass bir yol döndürüyor
-- [ ] domainglass surum çıkış kodu 0
+- [ ] domainglass kimlik çıkış kodu 0
 - [ ] domainglass yetenek geçerli JSON
 - [ ] domainglass sema geçerli JSON
 - [ ] domainglass saglik çıkış kodu 0

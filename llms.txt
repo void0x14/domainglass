@@ -12,7 +12,7 @@
 - tld: IANA TLD kaydı
 - akis: popülerlik RSS akışları
 - toplu: stdin üzerinden çoklu hedef
-- saglik, sema, yetenek, surum: bilgi komutları
+- saglik, sema, yetenek, kimlik: bilgi komutları
 
 ## Temel çağrılar
 

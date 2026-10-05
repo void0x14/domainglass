@@ -64,13 +64,38 @@ atlanır.
 4. gofmt, go vet ve go test temiz olmalı.
 5. Dokümantasyonu etkilenen bölümle birlikte güncelleyin.
 
-## Sürümleme
+## Derleme kimliği
 
-Sürüm numarası internal/cli/calistir.go içindeki Surum değişkenindedir.
-Derleme sırasında geçersiz kılınabilir:
+Bu araç sürüm numarası taşımaz. Bir ikilinin hangi koddan üretildiğini ayırt etmek
+için kaynak kimliği kullanılır: git commit hash'i ve çalışma ağacının kirli olup
+olmadığı.
 
 ```bash
-go build -ldflags "-X github.com/void0x14/domainglass/internal/cli.Surum=1.2.3" ./cmd/domainglass
+domainglass kimlik
+# örnek: 3dbbad9 · git · go1.21 · linux/amd64
+# kirli ağaç: 3dbbad9+ · git · go1.21 · linux/amd64
+```
+
+Kimlik iki kaynaktan çıkarılır (internal/build paketi):
+
+| Kaynak | Nasıl |
+|---|---|
+| Yerel git derlemesi | Go'nun gömdüğü `vcs.revision` / `vcs.modified` ayarları |
+| Modül proxy (`go install`) | Go'nun atadığı sözde sürümdeki 12 haneli hex önek |
+
+Hiçbiri yoksa kimlik `bilinmeyen` olur; uydurma değer üretilmez.
+
+Kimlik hem insan başlığında, hem JSON raporundaki `tool` bölümünde, hem de
+`yetenek` kataloğundaki `build` bölümünde görünür.
+
+```json
+"tool": {
+  "name": "domainglass",
+  "commit": "3dbbad9",
+  "dirty": false,
+  "go": "go1.21",
+  "platform": "linux/amd64"
+}
 ```
 
 ## Yeni uç nokta ekleme

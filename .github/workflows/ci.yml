@@ -33,4 +33,6 @@ jobs:
         run: ./domainglass sema | python3 -m json.tool > /dev/null
       - name: Katalog geçerliliği
         run: ./domainglass yetenek | python3 -m json.tool > /dev/null
+      - name: Kimlik komutu
+        run: ./domainglass kimlik
 

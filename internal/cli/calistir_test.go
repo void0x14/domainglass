@@ -74,8 +74,8 @@ func TestCozumleKomutYokVarsayilanHedef(t *testing.T) {
 }
 
 func TestKatalogTutarli(t *testing.T) {
-	katalog := YetenekKatalogu("test")
-	for _, anahtar := range []string{"tool", "version", "commands", "flags", "exitCodes", "resolvers", "feedNames", "installDoc", "agentContract", "agentGuide"} {
+	katalog := YetenekKatalogu()
+	for _, anahtar := range []string{"tool", "build", "commands", "flags", "exitCodes", "resolvers", "feedNames", "installDoc", "agentContract", "agentGuide"} {
 		if _, ok := katalog[anahtar]; !ok {
 			t.Errorf("katalogda %q eksik", anahtar)
 		}
@@ -133,9 +133,9 @@ func TestSemaZorunluAlanlarRaporJSONileEslesir(t *testing.T) {
 	}
 }
 
-func TestCalistirSurumCikisKodu(t *testing.T) {
-	if kod := Calistir([]string{"surum"}, os.Stdout, os.Stderr); kod != CikisBasarili {
-		t.Fatalf("sürüm çıkış kodu %d", kod)
+func TestCalistirKimlikCikisKodu(t *testing.T) {
+	if kod := Calistir([]string{"kimlik"}, os.Stdout, os.Stderr); kod != CikisBasarili {
+		t.Fatalf("kimlik çıkış kodu %d", kod)
 	}
 }
 

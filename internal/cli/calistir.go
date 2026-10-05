@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/void0x14/domainglass/internal/build"
 	"github.com/void0x14/domainglass/internal/dg"
 	"github.com/void0x14/domainglass/internal/dns"
 	"github.com/void0x14/domainglass/internal/feeds"
@@ -19,9 +20,6 @@ import (
 	"github.com/void0x14/domainglass/internal/out"
 	"github.com/void0x14/domainglass/internal/recon"
 )
-
-// Surum, aracın sürümüdür. Derleme sırasında -ldflags ile değiştirilebilir.
-var Surum = "1.0.0"
 
 // Çıkış kodları sözleşmesi.
 const (
@@ -98,7 +96,7 @@ func bayrakTanimlari() []bayrakTanimi {
 		{adlar: []string{"sessiz", "quiet"}, ata: func(a *Argumanlar, _ string) error { a.Sessiz = true; return nil }},
 		{adlar: []string{"girintisiz"}, ata: func(a *Argumanlar, _ string) error { a.Girintisiz = true; return nil }},
 		{adlar: []string{"yardim", "help", "h"}, ata: func(a *Argumanlar, _ string) error { a.Komut = "yardim"; return nil }},
-		{adlar: []string{"surum", "version"}, ata: func(a *Argumanlar, _ string) error { a.Komut = "surum"; return nil }},
+		{adlar: []string{"kimlik", "identity"}, ata: func(a *Argumanlar, _ string) error { a.Komut = "kimlik"; return nil }},
 		{adlar: []string{"sema", "schema"}, ata: func(a *Argumanlar, _ string) error { a.Komut = "sema"; return nil }},
 		{adlar: []string{"yetenek", "capabilities"}, ata: func(a *Argumanlar, _ string) error { a.Komut = "yetenek"; return nil }},
 	}
@@ -206,8 +204,9 @@ func Calistir(argv []string, stdout, stderr *os.File) int {
 	case "yardim":
 		fmt.Fprint(stdout, Kullanim())
 		return CikisBasarili
-	case "surum":
-		fmt.Fprintf(stdout, "domainglass %s\n", Surum)
+	case "kimlik":
+		k := build.Oku()
+		fmt.Fprintln(stdout, k.Tam())
 		return CikisBasarili
 	case "sema":
 		fmt.Fprintln(stdout, Sema)
@@ -216,7 +215,7 @@ func Calistir(argv []string, stdout, stderr *os.File) int {
 		enc := json.NewEncoder(stdout)
 		enc.SetIndent("", "  ")
 		enc.SetEscapeHTML(false)
-		if err := enc.Encode(YetenekKatalogu(Surum)); err != nil {
+		if err := enc.Encode(YetenekKatalogu()); err != nil {
 			fmt.Fprintf(stderr, "domainglass: katalog yazılamadı: %v\n", err)
 			return CikisHata
 		}
@@ -346,7 +345,7 @@ func hedefCalistir(ctx context.Context, c *dg.Client, a *Argumanlar, hedef strin
 		fmt.Fprintf(stderr, "domainglass: %s taranıyor…\n", hedef)
 	}
 	rapor := recon.Topla(ctx, c, hedef, s)
-	rapor.Arac.Surum = Surum
+	rapor.Arac = build.AracBilgisi("domainglass")
 	if err := ciktiVer(stdout, stderr, rapor, a, renk); err != nil {
 		fmt.Fprintf(stderr, "domainglass: çıktı yazılamadı: %v\n", err)
 		return CikisHata
@@ -379,7 +378,7 @@ func akisCalistir(ctx context.Context, c *dg.Client, a *Argumanlar, ad string, s
 	rapor := &model.Rapor{
 		Hedef:     "akis:" + ad,
 		Tur:       "feed",
-		Arac:      model.AracBilgisi{Ad: "domainglass", Surum: Surum},
+		Arac:      build.AracBilgisi("domainglass"),
 		Olusturma: time.Now().UTC().Format(time.RFC3339),
 		Akis:      bolum,
 		Kesif: model.KesifBolumu{
@@ -421,7 +420,7 @@ func asnCalistir(ctx context.Context, c *dg.Client, a *Argumanlar, girdi string,
 	rapor := &model.Rapor{
 		Hedef:     asn.Target.Label,
 		Tur:       "asn",
-		Arac:      model.AracBilgisi{Ad: "domainglass", Surum: Surum},
+		Arac:      build.AracBilgisi("domainglass"),
 		Olusturma: time.Now().UTC().Format(time.RFC3339),
 		ASN: &model.ASNBolumu{
 			Numara:        asn.Target.Number,
@@ -489,7 +488,7 @@ func tldCalistir(ctx context.Context, c *dg.Client, a *Argumanlar, tld string, s
 	rapor := &model.Rapor{
 		Hedef:     "." + tld,
 		Tur:       "tld",
-		Arac:      model.AracBilgisi{Ad: "domainglass", Surum: Surum},
+		Arac:      build.AracBilgisi("domainglass"),
 		Olusturma: time.Now().UTC().Format(time.RFC3339),
 		TLD:       bolum,
 		Kesif: model.KesifBolumu{
@@ -537,7 +536,7 @@ func topluCalistir(ctx context.Context, c *dg.Client, a *Argumanlar, s recon.Sec
 		}
 		sayac++
 		rapor := recon.Topla(ctx, c, hedef, s)
-		rapor.Arac.Surum = Surum
+		rapor.Arac = build.AracBilgisi("domainglass")
 		if a.NDJSON {
 			if err := enc.Encode(rapor); err != nil {
 				fmt.Fprintf(stderr, "domainglass: %s yazılamadı: %v\n", hedef, err)

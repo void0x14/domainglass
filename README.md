@@ -117,7 +117,7 @@ cat hedefler.txt | domainglass toplu -ndjson > sonuclar.ndjson
 | `saglik` | Servis erişimini sınar |
 | `sema` | Rapor JSON şeması |
 | `yetenek` | Makine kataloğu (JSON) |
-| `surum` | Sürüm |
+| `kimlik` | Bu derlemenin kaynak kimliği (commit) |
 
 Hedef türü otomatik sezilir: `domainglass example.com` ile
 `domainglass domain example.com` aynıdır.
@@ -142,7 +142,7 @@ Hedef türü otomatik sezilir: `domainglass example.com` ile
 | `-renk <kip>` | Renk kipi: `auto`, `always`, `never` |
 | `-sessiz` | İlerleme günlüklerini bastır |
 | `-girintisiz` | JSON çıktısını girintisiz yaz |
-| `-yardim`, `-surum`, `-sema`, `-yetenek` | Yardım, sürüm, şema, katalog |
+| `-yardim`, `-kimlik`, `-sema`, `-yetenek` | Yardım, derleme kimliği, şema, katalog |
 
 ---
 

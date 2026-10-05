@@ -113,7 +113,7 @@ stdin üzerinden çoklu hedef. Boş satırlar ve `#` ile başlayanlar atlanır.
 
 domain.glass servis erişimini sınar. Başarılıysa kod 0, değilse hata kodu döner.
 
-### `sema`, `yetenek`, `surum`, `yardim`
+### `sema`, `yetenek`, `kimlik`, `yardim`
 
 Çevrimdışı çalışan bilgi komutları. Ajanlar için önerilen giriş noktası
 `yetenek` komutudur.

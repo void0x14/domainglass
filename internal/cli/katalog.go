@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+
+	"github.com/void0x14/domainglass/internal/build"
 )
 
 // Bayrak, desteklenen bir komut satırı bayrağıdır.
@@ -29,7 +31,7 @@ var Bayraklar = []Bayrak{
 	{Adlar: []string{"renk", "color"}, Degerli: true, Aciklama: "Renk kipi: auto | always | never"},
 	{Adlar: []string{"sessiz", "quiet"}, Aciklama: "İlerleme ve uyarı günlüklerini stderr üzerinde bastır"},
 	{Adlar: []string{"yardim", "help"}, Aciklama: "Kullanım bilgisini yazdır"},
-	{Adlar: []string{"surum", "version"}, Aciklama: "Sürüm bilgisini yazdır"},
+	{Adlar: []string{"kimlik", "identity"}, Aciklama: "Bu derlemenin kaynak kimliğini (commit) yazdır"},
 	{Adlar: []string{"sema", "schema"}, Aciklama: "Rapor JSON şemasını yazdır"},
 	{Adlar: []string{"yetenek", "capabilities"}, Aciklama: "Makineler için komut/bayrak/çıkış kodu kataloğunu JSON olarak yazdır"},
 	{Adlar: []string{"girintisiz"}, Aciklama: "JSON çıktısını girintisiz yazdır"},
@@ -53,7 +55,7 @@ var Komutlar = []Komut{
 	{Ad: "saglik", Ozet: "domain.glass servis erişimini sınar", Ornek: "domainglass saglik"},
 	{Ad: "sema", Ozet: "Rapor JSON şemasını yazdırır", Ornek: "domainglass sema"},
 	{Ad: "yetenek", Ozet: "Makine kataloğunu yazdırır", Ornek: "domainglass yetenek"},
-	{Ad: "surum", Ozet: "Sürüm bilgisini yazdırır", Ornek: "domainglass surum"},
+	{Ad: "kimlik", Ozet: "Bu derlemenin kaynak kimliğini (commit) yazdırır", Ornek: "domainglass kimlik"},
 	{Ad: "yardim", Ozet: "Bu kullanım bilgisini yazdırır", Ornek: "domainglass yardim"},
 }
 
@@ -120,7 +122,7 @@ func Kullanim() string {
 }
 
 // YetenekKatalogu, makineler için tam kataloğu JSON'a uygun biçimde döner.
-func YetenekKatalogu(surum string) map[string]any {
+func YetenekKatalogu() map[string]any {
 	bayraklar := make([]map[string]any, 0, len(Bayraklar))
 	for _, f := range Bayraklar {
 		bayraklar = append(bayraklar, map[string]any{
@@ -151,7 +153,7 @@ func YetenekKatalogu(surum string) map[string]any {
 	})
 	return map[string]any{
 		"tool":            "domainglass",
-		"version":         surum,
+		"build":           buildBilgisi(),
 		"description":     "domain.glass istihbarat aracı; insan ve AI ajanları için.",
 		"commands":        komutlar,
 		"flags":           bayraklar,
@@ -164,5 +166,17 @@ func YetenekKatalogu(surum string) map[string]any {
 		"agentGuide":      "https://github.com/void0x14/domainglass/blob/main/docs/AI-AJANLARI.md",
 		"pipelineHint":    "Satır çıktısı için -subs, -ips, -related, -emails, -orgs kullanın.",
 		"determinismNote": "JSON anahtarları İngilizcedir; hata günlükleri stderr, veri stdout üzerindedir.",
+	}
+}
+
+// buildBilgisi, katalogda gösterilen derleme kimliğidir.
+// Sürüm numarası yoktur; ayırt edici bilgi commit hash'idir.
+func buildBilgisi() map[string]any {
+	k := build.Oku()
+	return map[string]any{
+		"commit":   k.Commit,
+		"dirty":    k.Degisti,
+		"go":       k.Go,
+		"platform": k.Platform,
 	}
 }

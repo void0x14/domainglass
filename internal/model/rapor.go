@@ -38,9 +38,15 @@ type Rapor struct {
 }
 
 // AracBilgisi, üretici aracın kimliğidir.
+//
+// Sürüm numarası bilinçli olarak yoktur. Bir ikilinin hangi koddan üretildiğini
+// ayırt etmek için commit hash'i ve çalışma ağacının durumu kullanılır.
 type AracBilgisi struct {
-	Ad    string `json:"name"`
-	Surum string `json:"version"`
+	Ad       string `json:"name"`
+	Commit   string `json:"commit,omitempty"`
+	Degisti  bool   `json:"dirty,omitempty"`
+	Go       string `json:"go,omitempty"`
+	Platform string `json:"platform,omitempty"`
 }
 
 // Ozet, raporun makine tarafından hızlı tüketilen özetidir.
