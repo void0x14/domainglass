@@ -82,10 +82,17 @@ go version
 ### Yol A — go install (tercih edilen)
 
 **DİKKAT:** bu depo tag yayınlamaz, sürüm numarası taşımaz. Bu yüzden `@latest`
-kullanma. Modül proxy `@latest` için önbelleğe aldığı eski bir commit'i döndürür
-ve kurduğun ikili güncel koddan gelmez.
+güvenilir değildir: modül proxy'si `@latest` isteğini önbellekten eski bir commit
+ile yanıtlar. Ölçülen örnek:
 
-Onun yerine her zaman **commit hash'i ile sabitle**:
+```text
+proxy @latest        -> 307946d  (eski)
+github main          -> 244ff26  (güncel)
+```
+
+İki çözüm var. **Birincisi kesin sonuç verir, onu kullan.**
+
+#### Çözüm 1 (önerilen) — commit ile sabitle
 
 ```bash
 # 1. Güncel commit'i öğren
@@ -94,16 +101,52 @@ echo "$COMMIT"
 
 # 2. O commit'i kur
 go install "github.com/void0x14/domainglass/cmd/domainglass@${COMMIT}"
+
+# 3. Doğrula: çıktıdaki commit, 1. adımda aldığın değerle aynı olmalı
+domainglass kimlik
 ```
 
-Bu komut ikiliyi $(go env GOPATH)/bin/domainglass yoluna koyar.
+#### Çözüm 2 — proxy'yi atla
 
-Alternatif olarak `@main` de kullanılabilir, ancak proxy onu da geciktirebilir;
-commit hash'i kesin sonuç verir. Kurulumdan sonra doğrula:
+Proxy önbelleğini devre dışı bırakıp doğrudan git'e git:
 
 ```bash
-domainglass kimlik    # çıktıdaki commit, 1. adımda aldığın commit ile aynı olmalı
+GOPROXY=direct go install github.com/void0x14/domainglass/cmd/domainglass@latest
+domainglass kimlik
 ```
+
+Bu yol git'in kurulu olmasını ve GitHub'a erişimi gerektirir; proxy'ye göre daha
+yavaştır ama her zaman güncel kodu getirir.
+
+#### Eski bir commit'i kurmak
+
+Belirli bir geçmiş sürüme dönmek istersen aynı biçimde commit hash'i ver. Bu depo
+commit geçmişini korur; eski commit'ler kurulabilir:
+
+```bash
+# Commit geçmişini listele
+git ls-remote --tags https://github.com/void0x14/domainglass 2>/dev/null
+# Tag yok; doğrudan klonlayıp geçmişe bak:
+git clone --quiet https://github.com/void0x14/domainglass /tmp/dg-tarih
+git -C /tmp/dg-tarih log --oneline --all
+
+# Beğendiğin commit'i kur
+go install "github.com/void0x14/domainglass/cmd/domainglass@<commit>"
+domainglass kimlik    # kurduğun commit ile eşleşmeli
+```
+
+Doğrulanmış örnekler:
+
+| Commit | Ne içerir | Kurulabilir mi |
+|---|---|---|
+| `c94e95a` | ilk sürüm denemesi | **Hayır** — `cmd/` dizini o commit'te yok |
+| `307946d` | çalışan ilk araç | Evet — `domainglass surum` → `1.0.0` |
+| `3dbbad9` | KURULUM.md eklendi | Evet — `domainglass surum` → `1.0.0` |
+| `8b75be7` | sürüm kaldırıldı, kimlik geldi | Evet — `domainglass kimlik` |
+| `244ff26` | go install düzeltmesi | Evet — güncel |
+
+Not: `8b75be7` öncesi commit'lerde `kimlik` komutu yoktur, `surum` vardır.
+`8b75be7` sonrasında tersi geçerlidir.
 
 Kurulum dizinini PATH'e ekle (yalnızca eksikse):
 
