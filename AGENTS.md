@@ -143,6 +143,46 @@ def istihbarat(hedef: str) -> dict:
     return json.loads(p.stdout)
 ```
 
+## Commit mesajı sözleşmesi (zorunlu)
+
+Bu depo sürüm numarası taşımaz ve tag yayınlamaz. Bir commit mesajı, o
+değişikliğin **tek sürüm notudur**. Biçim serbest değildir; `commit-msg` kancası
+denetler ve kurala uymayan mesajı commit ettirmez.
+
+Biçim:
+
+```text
+<tip>(<kapsam>): <özet>
+
+Neden:
+<bu değişiklik neden gerekliydi>
+
+Ne:
+- <somut değişiklik>
+
+Kanıt:
+<çalıştırılan komut ve görülen sonuç>
+
+Çekilebilir: evet|hayır
+Kırıcı: yok|<ne bozuldu>
+```
+
+Tipler: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, `revert`.
+
+Commit atmadan önce denetle:
+
+```bash
+python3 scripts/commit-denetle.py --liste         # kural özeti
+python3 scripts/commit-denetle.py --commit HEAD   # son commit'i denetle
+```
+
+Kurallar: başlık 72 karakteri aşmaz; özet küçük harfle başlar ve nokta ile bitmez;
+`Neden`, `Ne`, `Kanıt` bölümleri zorunludur; `Ne` madde listesi olmalıdır;
+`Çekilebilir` etiketi "bu commit tek başına çekilip kullanılabilir mi" sorusunu
+yanıtlar.
+
+Tam kural: [docs/COMMIT-STANDART.md](docs/COMMIT-STANDART.md)
+
 ## Kurulum
 
 Aracı kurmak veya güncellemek için [KURULUM.md](KURULUM.md) dosyasını oku ve
@@ -152,6 +192,7 @@ bölümlerini okumana gerek yoktur.
 ## İlgili belgeler
 
 - [KURULUM.md](KURULUM.md) — ajana kurdurma ve devreye alma sözleşmesi
+- [docs/COMMIT-STANDART.md](docs/COMMIT-STANDART.md) — commit mesajı standardı
 - [README.md](README.md) — genel bakış
 - [docs/AI-AJANLARI.md](docs/AI-AJANLARI.md) — ayrıntılı ajan kılavuzu
 - [docs/KULLANIM.md](docs/KULLANIM.md) — tüm bayraklar ve tarifler

@@ -35,4 +35,11 @@ jobs:
         run: ./domainglass yetenek | python3 -m json.tool > /dev/null
       - name: Kimlik komutu
         run: ./domainglass kimlik
+      - name: Commit denetleyici testleri
+        run: python3 scripts/commit-denetle-test.py
+      - name: Commit mesajları kurallara uygun mu
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags origin ${{ github.event.pull_request.base.ref }}
+          python3 scripts/commit-denetle.py --aralik origin/${{ github.event.pull_request.base.ref }}..HEAD
 

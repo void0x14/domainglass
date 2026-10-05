@@ -379,7 +379,8 @@ Kurulum bittikten sonra ihtiyacına göre:
 
 | Belge | İçerik |
 |---|---|
-| [AGENTS.md](AGENTS.md) | Kısa ajan sözleşmesi |
+| [AGENTS.md](AGENTS.md) | Kısa ajan sözleşmesi (commit biçimi dahil) |
+| [docs/COMMIT-STANDART.md](docs/COMMIT-STANDART.md) | Commit mesajı standardı |
 | [docs/AI-AJANLARI.md](docs/AI-AJANLARI.md) | Ayrıntılı ajan kılavuzu ve tarifler |
 | [docs/KULLANIM.md](docs/KULLANIM.md) | Tam kullanım başvurusu |
 | [docs/MIMARI.md](docs/MIMARI.md) | Mimari ve tasarım kararları |

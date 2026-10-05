@@ -9,6 +9,7 @@ Bu depo için ajan sözleşmesi [AGENTS.md](AGENTS.md) dosyasındadır. Özet:
 - Veri stdout'ta, günlükler stderr'dedir.
 - Çıkış kodları: 0 başarılı, 1 hata, 2 kayıtlı değil, 3 hız sınırı, 4 kullanım hatası.
 - `-json` ile `-subs`/`-ips`/`-related` birlikte kullanılamaz.
+- Commit mesajı biçimi zorunludur; kanca denetler. Bkz. docs/COMMIT-STANDART.md.
 
 Ayrıntı: [docs/AI-AJANLARI.md](docs/AI-AJANLARI.md)
 

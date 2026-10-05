@@ -52,9 +52,31 @@ internal/out/        İnsan/JSON/NDJSON çıktı
 | Keşif | Sabit API yanıtlarıyla korelasyon ve kaynak etiketi |
 | Çıktı | JSON geçerliliği, alan seçimi, insan çıktısı içerik denetimi |
 | CLI | Bayrak çözümleme, çakışma denetimleri, katalog/şema tutarlılığı |
+| Betikler | Commit mesajı denetleyicisi (20 durum testi) |
 
 Ağ erişimi gerektiren testler ortam değişkeniyle açılır; varsayılan olarak
 atlanır.
+
+## Commit akışı
+
+Bu depo sürüm numarası taşımaz ve tag yayınlamaz; commit mesajı tek sürüm
+notudur. Biçim zorunludur ve `commit-msg` kancası denetler. Tam kural:
+[COMMIT-STANDART.md](COMMIT-STANDART.md).
+
+Kancaları bir kez etkinleştir:
+
+```bash
+sh scripts/kur-kancalar.sh
+```
+
+Commit atmadan önce denetle:
+
+```bash
+python3 scripts/commit-denetle.py --liste         # kural özeti
+python3 scripts/commit-denetle.py --commit HEAD   # son commit
+python3 scripts/commit-denetle.py --gecmis 10     # son 10 commit
+make denetle                                      # testler + son commit
+```
 
 ## Katkı akışı
 
@@ -63,6 +85,8 @@ atlanır.
 3. En küçük değişiklikle yeşile getirin.
 4. gofmt, go vet ve go test temiz olmalı.
 5. Dokümantasyonu etkilenen bölümle birlikte güncelleyin.
+6. Commit mesajını standarta uygun yazın; `Çekilebilir` etiketini dürüstçe
+   doldurun.
 
 ## Derleme kimliği
 

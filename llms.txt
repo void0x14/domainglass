@@ -33,7 +33,8 @@ Veri stdout'ta, günlükler stderr'dedir.
 
 - [README](README.md): genel bakış, kurulum, örnekler
 - [KURULUM.md](KURULUM.md): ajana kurdurma ve devreye alma sözleşmesi
-- [AGENTS.md](AGENTS.md): ajan çalıştırma sözleşmesi
+- [AGENTS.md](AGENTS.md): ajan çalıştırma sözleşmesi (commit biçimi dahil)
+- [docs/COMMIT-STANDART.md](docs/COMMIT-STANDART.md): commit mesajı standardı
 - [docs/AI-AJANLARI.md](docs/AI-AJANLARI.md): ajan kılavuzu ve tarifler
 - [docs/KULLANIM.md](docs/KULLANIM.md): tam kullanım başvurusu
 - [docs/MIMARI.md](docs/MIMARI.md): mimari ve tasarım kararları

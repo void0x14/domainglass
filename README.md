@@ -280,7 +280,8 @@ domainglass sema      # rapor JSON şeması (JSON Schema 2020-12)
 | [docs/AI-AJANLARI.md](docs/AI-AJANLARI.md) | Ajan entegrasyonu, JSON şeması, tarifler |
 | [docs/MIMARI.md](docs/MIMARI.md) | Paket yapısı, veri akışı, tasarım kararları |
 | [docs/API-KAYNAK.md](docs/API-KAYNAK.md) | domain.glass uç noktaları ve başlık sözleşmesi |
-| [docs/GELISTIRME.md](docs/GELISTIRME.md) | Geliştirme, test, katkı |
+| [docs/GELISTIRME.md](docs/GELISTIRME.md) | Geliştirme, test, commit akışı |
+| [docs/COMMIT-STANDART.md](docs/COMMIT-STANDART.md) | Commit mesajı standardı |
 
 ---
 

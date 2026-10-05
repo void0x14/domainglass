@@ -1,0 +1,15 @@
+#!/bin/sh
+# commit-msg kancası.
+#
+# Neden gerekli: bu depo sürüm numarası taşımaz ve tag yayınlamaz. Bir commit
+# mesajı, o değişikliğin tek sürüm notudur. Biçimi bozuk bir mesaj, hangi
+# commit'in ne içerdiğini ve neden atıldığını okunamaz hâle getirir.
+#
+# Atlatma: ajan veya kullanıcı bilinçli olarak atlamak isterse
+#   git commit --no-verify
+# kullanabilir. Bu bilinçli bir karardır ve mesaj gövdesinde belirtilmelidir.
+
+set -eu
+
+python3 scripts/commit-denetle.py "$1"
+
