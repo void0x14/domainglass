@@ -159,6 +159,9 @@ func YetenekKatalogu(surum string) map[string]any {
 		"resolvers":       cozumleyiciler,
 		"feedNames":       AkisAdlari(),
 		"jsonSchemaCmd":   "domainglass sema",
+		"installDoc":      "https://github.com/void0x14/domainglass/blob/main/KURULUM.md",
+		"agentContract":   "https://github.com/void0x14/domainglass/blob/main/AGENTS.md",
+		"agentGuide":      "https://github.com/void0x14/domainglass/blob/main/docs/AI-AJANLARI.md",
 		"pipelineHint":    "Satır çıktısı için -subs, -ips, -related, -emails, -orgs kullanın.",
 		"determinismNote": "JSON anahtarları İngilizcedir; hata günlükleri stderr, veri stdout üzerindedir.",
 	}

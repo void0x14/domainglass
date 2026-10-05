@@ -27,13 +27,41 @@ filtrelerini ve pasif altyapı korelasyonunu tek komutta verir.
 
 ## Kurulum
 
-### Go ile derleme
+### Yapay zeka ajanına kurdur (önerilen)
+
+Ajanına aşağıdaki bloğu olduğu gibi ver. Ajan dosyayı okur, adımları sırayla
+uygular, doğrular ve kontrol listesini raporlar. İnsan talimatı okumasına gerek
+kalmaz.
+
+```text
+https://raw.githubusercontent.com/void0x14/domainglass/main/KURULUM.md adresini oku
+ve içindeki adımları sırayla, kendin uygula. Kurulumu doğrulamadan "kuruldu" deme;
+6. bölümdeki kontrol listesini tek tek çalıştırıp sonucu raporla.
+```
+
+Ajan dosyayı indiremiyorsa (ağ kısıtı), doğrudan oku:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/void0x14/domainglass/main/KURULUM.md
+# veya depo klonlandıysa:
+cat KURULUM.md
+```
+
+Kurulum dosyası; Go ön koşulunu, iki kurulum yolunu (go install / kaynak koddan
+derleme), zorunlu doğrulama komutlarını, çıkış kodu sözleşmesini, ajan kullanım
+kalıplarını, kısıtları ve sorun giderme adımlarını içerir.
+
+### İnsan olarak kur
+
+İnsanlar için iki yol var: Go ile derleme veya kaynak koddan derleme.
+
+#### Go ile derleme
 
 ```bash
 go install github.com/void0x14/domainglass/cmd/domainglass@latest
 ```
 
-### Kaynak koddan
+#### Kaynak koddan
 
 ```bash
 git clone https://github.com/void0x14/domainglass.git
@@ -111,7 +139,7 @@ Hedef türü otomatik sezilir: `domainglass example.com` ile
 | `-cozumleyici <idler>` | Bağımsız DNS filtre çözümleyicileri (virgülle ayrılmış) |
 | `-timeout <sn>` | İstek zaman aşımı (varsayılan 20) |
 | `-hiz <ms>` | İstekler arası asgari aralık (varsayılan 1100) |
-| `-renk auto|always|never` | Renk kipi |
+| `-renk <kip>` | Renk kipi: `auto`, `always`, `never` |
 | `-sessiz` | İlerleme günlüklerini bastır |
 | `-girintisiz` | JSON çıktısını girintisiz yaz |
 | `-yardim`, `-surum`, `-sema`, `-yetenek` | Yardım, sürüm, şema, katalog |

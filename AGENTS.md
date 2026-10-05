@@ -143,8 +143,15 @@ def istihbarat(hedef: str) -> dict:
     return json.loads(p.stdout)
 ```
 
+## Kurulum
+
+Aracı kurmak veya güncellemek için [KURULUM.md](KURULUM.md) dosyasını oku ve
+adımları sırayla uygula. Kurulum tamamen o dosyadadır; README'nin insan
+bölümlerini okumana gerek yoktur.
+
 ## İlgili belgeler
 
+- [KURULUM.md](KURULUM.md) — ajana kurdurma ve devreye alma sözleşmesi
 - [README.md](README.md) — genel bakış
 - [docs/AI-AJANLARI.md](docs/AI-AJANLARI.md) — ayrıntılı ajan kılavuzu
 - [docs/KULLANIM.md](docs/KULLANIM.md) — tüm bayraklar ve tarifler

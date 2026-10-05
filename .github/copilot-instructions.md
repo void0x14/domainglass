@@ -2,6 +2,7 @@
 
 Bu depo, domain.glass istihbaratını terminale taşıyan Go aracıdır.
 
+Kurulum için [KURULUM.md](../KURULUM.md) dosyasını okuyun ve adımları uygulayın.
 Ajan talimatları için [AGENTS.md](../AGENTS.md) dosyasını okuyun.
 Ayrıntılı kılavuz: [docs/AI-AJANLARI.md](../docs/AI-AJANLARI.md).
 

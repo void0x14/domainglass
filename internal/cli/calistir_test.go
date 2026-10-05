@@ -75,7 +75,7 @@ func TestCozumleKomutYokVarsayilanHedef(t *testing.T) {
 
 func TestKatalogTutarli(t *testing.T) {
 	katalog := YetenekKatalogu("test")
-	for _, anahtar := range []string{"tool", "version", "commands", "flags", "exitCodes", "resolvers", "feedNames"} {
+	for _, anahtar := range []string{"tool", "version", "commands", "flags", "exitCodes", "resolvers", "feedNames", "installDoc", "agentContract", "agentGuide"} {
 		if _, ok := katalog[anahtar]; !ok {
 			t.Errorf("katalogda %q eksik", anahtar)
 		}

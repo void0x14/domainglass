@@ -143,7 +143,7 @@ domain.glass servis erişimini sınar. Başarılıysa kod 0, değilse hata kodu 
 | `-timeout <sn>` | 20 | İstek zaman aşımı |
 | `-hiz <ms>` | 1100 | İstekler arası asgari aralık |
 | `-sessiz` | kapalı | İlerleme günlüklerini bastır |
-| `-renk <kip>` | auto | `auto`, `always`, `never` |
+| `-renk <kip>` | `auto` | Renk kipi: `auto`, `always`, `never` |
 | `-cozumleyici <idler>` | kapalı | Bağımsız DNS filtre çözümleyicileri |
 
 ---

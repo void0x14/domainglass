@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+Kurulum için [KURULUM.md](KURULUM.md) dosyasını oku ve adımları sırayla uygula.
+
 Bu depo için ajan sözleşmesi [AGENTS.md](AGENTS.md) dosyasındadır. Özet:
 
 - Aracın kataloğunu tahmin etme; `domainglass yetenek` ve `domainglass sema` çalıştır.

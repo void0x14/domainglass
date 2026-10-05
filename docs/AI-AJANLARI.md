@@ -4,6 +4,12 @@ Bu belge, ajanların `domainglass` aracını sıfır sürtünmeyle kullanması i
 gereken her şeyi içerir. Kısa sözleşme için [AGENTS.md](../AGENTS.md) dosyasına
 bakın; bu belge ayrıntı ve tarifleri taşır.
 
+## 0. Kurulum
+
+Araç henüz kurulu değilse önce [KURULUM.md](../KURULUM.md) dosyasını oku ve
+adımları uygula. O dosya Go ön koşulunu, iki kurulum yolunu, zorunlu doğrulamayı
+ve kontrol listesini içerir. Kurulum tamamlandıktan sonra bu belgeye dön.
+
 ## 1. Keşif: aracın kendini tanıtması
 
 Ajanların tahmine ihtiyacı yok. Araç iki çevrimdışı komutla kendini tanımlar:
